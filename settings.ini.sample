@@ -1,0 +1,37 @@
+#config PostgreSQL
+
+#effacer la base de donnée existante lors de l'installation
+drop_apps_db=true
+
+#host hébergeant la base de données
+db_host=localhost
+
+#port de la base de données
+db_port=5432
+
+#nom de la base de données de l'application
+db_name=taxhubdb
+
+#nom de l'utilisateur propriétaire de la base PostgreSQL
+user_pg=geonatuser
+
+#user propriétaire de la base geonaturedb
+user_pg_pass=monpassachanger
+
+#config Python
+#Python3 est requis
+
+#path vers python
+python_path=/usr/bin/python3.4
+
+###localisation du schema utilisateur
+#valeurs possibles : 'local' ou 'foreign'
+#nota : foreign nécessite d'avoir installer usersHub au préalable
+users_schema=local
+
+###Configuration de la relation avec usershub - Nécessaire si users_schema=foreign
+usershub_host=localhost
+usershub_db=usershubdb
+usershub_port=5432
+usershub_user=usershubuser
+usershub_pass=monpassachanger

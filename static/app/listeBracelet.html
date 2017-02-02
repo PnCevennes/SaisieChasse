@@ -1,0 +1,188 @@
+    <div class="jumbotron">
+        <div class="container" >
+            <h1>Plan de chasse</h1>
+        </div>
+    </div>
+
+    <div class="panel panel-primary" id ="bracelet-info">
+        <div class="panel-heading">Selectionner un Bracelet </div>
+        <div class="panel-body">
+            <input type="text" ng-model="selectedBracelet"
+            typeahead="b as b.no_bracelet for b in listBracelets | filter:$viewValue | orderBy:'no_bracelet' | limitTo:15"
+            class="form-control"
+            typeahead-editable="false">
+        </div>
+    </div>
+
+
+    <form  class="simple-form" ng-show="currentBracelet" name="saisieform">
+        <div class="panel panel-info" id ="bracelet-info">
+            <div class="panel-heading">
+                <label class="info-nom">Numéro de bracelet : <label>
+                <span class="info-value">{{currentBracelet.no_bracelet}}</span>
+            </div>
+
+        <div class="panel-body">
+
+        <fieldset class="form-horizontal">
+        <legend>Localisation:</legend>
+            <div class="info-value"><label class="info-nom">Taxon: <label>{{currentBracelet.nom_vern}}</div>
+            <div class="info-value">
+                <label class="info-nom">Massif affecté : <span thesaurus idtype="4"  stf="libelle" queryparam="ilikeHierachie=004.0%5F%5F" my-directive-var="currentBracelet.massif_affecte"  is-disabled="true"></span>
+
+            </div>
+                <div class="info-value">
+                    <label>ZI affectée</label>
+                    <span>
+                        <select ng-disabled="true"  ng-required="false" ng-model="currentBracelet.z_i_affectee" class="form-control" req>
+                            <option ng-repeat="obj in listZi | orderBy:'code'" value="{{obj.code}}">{{obj.code}} {{obj.libelle}}</option>
+                        </select>
+                    </span>
+                </div>
+            <label>Massif realisé</label><div thesaurus idtype="4"  stf="libelle" queryparam="ilikeHierachie=004.0%5F%5F" my-directive-var="currentBracelet.massif_realise"></div>
+
+            <div>
+                <label>ZI realisée</label>
+                <select ng-model="currentBracelet.z_i_realisee" class="form-control" req>
+                    <option ng-repeat="obj in listZi | orderBy:'code'" value="{{obj.code}}">{{obj.code}} {{obj.libelle}}</option>
+                </select>
+            </div>
+            <div>
+                <label>Commune</label>
+                <input id="commune"  placeholder="Commune" type="text"
+                ng-model="selectedCommune"
+                 autocomplete="off"
+                typeahead="b as b.value for b in listCommunes | filter:$viewValue | limitTo:8" class="form-control"
+                typeahead-on-select="currentBracelet.cd_com=$item.id" />
+
+            </div>
+            <div>
+                <label>Lieu-dit</label>
+                <input id="lieudit"  placeholder="Lieux dits" type="text"
+                ng-model="selectedLieuDit"
+                 autocomplete="off"
+                typeahead="b as b.synonyme for b in listLieuDits | filter:$viewValue | orderBy:'synonyme'  | limitTo:20" class="form-control"
+                typeahead-on-select="currentBracelet.pk_nom_lieudit=$item.id"  required/>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="currentBracelet.parc_onf">
+                Parcelle ONF
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="currentBracelet.mortalite_hors_pc">
+                    Mortalité hors plan chasse
+                </label>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-inline">
+            <legend>Constat</legend>
+            <label>Date exacte</label>
+
+            <div class="input-group">
+                <input type="text" class="form-control" datepicker-popup="d/M/yy" ng-model="currentBracelet.date_exacte" is-open="status.opened" close-text="Close"/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
+            <div class="form-group">
+                <label>Auteur constat</label>
+                <input id="auteur_constat" class="form-control"  placeholder="Auteur constat" type="text"
+                ng-model="currentBracelet.auteur_constat"
+                typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir' | limitTo:8" class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label>Auteur tir</label>
+                <input id="auteur_tir" class="form-control"  placeholder="Auteur tir" type="text"
+                ng-model="currentBracelet.auteur_tir"
+                typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir'  | limitTo:8" class="form-control"/>
+            </div>
+            <div><label>Mode de chasse</label><span thesaurus idtype="3"  stf="libelle" my-directive-var="currentBracelet.mode_chasse"  is-required="true"></span></div>
+        </fieldset>
+
+         <fieldset class="form-inline">
+            <legend>Individu</legend>
+            <div class="form-group">
+                <label>Sexe</label>
+                <span thesaurus idtype="1"  stf="libelle" my-directive-var="currentBracelet.sexe"  is-required="true"></span>
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <span thesaurus idtype="2"  stf="libelle" my-directive-var="currentBracelet.classe_age"  is-required="true"></span>
+            </div>
+            <div class="form-group">
+                <label>Gestation</label>
+                <input type="checkbox" id="gestation" class="form-control"  ng-model="currentBracelet.gestation" >
+            </div>
+        </fieldset>
+
+        <fieldset class="form-inline">
+            <legend>Cors:</legend>
+            <div class="form-group">
+                <label>Nb ind.</label>
+                <input type="checkbox" class="form-control"  id="cors_indetermine" ng-model="currentBracelet.cors_indetermine">
+            </div>
+            <div class="form-group">
+                <label>Nb.</label><input type="number" class="form-control"  id="cors_nb" min="0" ng-model="currentBracelet.cors_nb" />
+            </div>
+            <div class="form-group">
+                <label>Remarque</label><input type="text" class="form-control"  id="cors_commentaire" ng-model="currentBracelet.cors_commentaire" />
+            </div>
+        </fieldset>
+
+        <fieldset class="form-inline">
+            <legend>Poids(kg):</legend>
+            <div class="form-group">
+                <label>Ind.</label>
+                <input type="checkbox" class="form-control"  id="poids_ind" ng-model="currentBracelet.poids_ind" >
+            </div>
+            <div class="form-group">
+                <label>Vide</label><input type="number" class="form-control"  id="poids_vide" min="0" ng-model="currentBracelet.poids_vide" />
+            </div>
+            <div class="form-group">
+                <label>Entier</label><input type="number" class="form-control"  id="poids_entier" min="0" ng-model="currentBracelet.poids_entier" />
+            </div>
+            <div class="form-group">
+                <label>cfp</label><input type="number" class="form-control"  id="poids_c_f_p" min="0" ng-model="currentBracelet.poids_c_f_p"  />
+            </div>
+        </fieldset>
+         <fieldset class="form-inline">
+            <legend>Longueur dagues (mm)</legend>
+            <div class="form-group">
+                <label>Droite</label>
+                <input type="number" class="form-control"  id="long_dagues_droite" min="0" ng-model="currentBracelet.long_dagues_droite" />
+            </div>
+            <div class="form-group">
+                <label>Gauche</label>
+                <input type="number" class="form-control"  id="long_dagues_gauche" min="0" ng-model="currentBracelet.long_dagues_gauche" />
+            </div>
+        </fieldset>
+         <fieldset class="form-inline">
+            <legend>Longueur mandibules (mm)</legend>
+            <div class="form-group">
+                <label>Droite</label>
+                <input type="number" class="form-control"  id="long_mandibules_droite" min="0" ng-model="currentBracelet.long_mandibules_droite" />
+            </div>
+            <div class="form-group">
+                <label>Gauche</label>
+                <input type="number" class="form-control"  id="long_mandibules_gauche" min="0" ng-model="currentBracelet.long_mandibules_gauche" />
+            </div>
+        </fieldset>
+
+
+        <fieldset  class="form-horizontal">
+            <div class="form-group">
+                <label>Remarque</label><input type="textarea" class="form-control" rows="5" id="obs" ng-model="currentBracelet.obs"/>
+            </div>
+        </fieldset>
+
+        <button type="button" ng-click="update()" class="btn btn-primary">Enregistrer</button></div>
+        </div>
+
+      </form>
+
+</div>
