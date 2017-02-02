@@ -1,0 +1,29 @@
+{
+  "name": "SaisieChasse",
+  "description": "Application permettant la saisie des constats de chasse",
+  "main": "/static/app/app.js",
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-route": "^1.5.3",
+    "angular-ui-bootstrap": "^2.4.0",
+    "bootstrap": "^3.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PnCevennes/SaisieChasse.git"
+  },
+  "keywords": [
+    "chasse",
+    "parcs nationaux"
+  ],
+  "author": "pnc-FT",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/PnCevennes/issues"
+  },
+  "homepage": "https://github.com/PnCevennes#readme"
+}

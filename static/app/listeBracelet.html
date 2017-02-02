@@ -8,7 +8,8 @@
         <div class="panel-heading">Selectionner un Bracelet </div>
         <div class="panel-body">
             <input type="text" ng-model="selectedBracelet"
-            typeahead="b as b.no_bracelet for b in listBracelets | filter:$viewValue | orderBy:'no_bracelet' | limitTo:15"
+            uib-typeahead="b as b.no_bracelet for b in listBracelets | filter:$viewValue | orderBy:'no_bracelet' | limitTo:15"
+            typeahead-on-select="onSelectBracelet($item, $model, $label)"
             class="form-control"
             typeahead-editable="false">
         </div>
@@ -51,8 +52,9 @@
                 <label>Commune</label>
                 <input id="commune"  placeholder="Commune" type="text"
                 ng-model="selectedCommune"
-                 autocomplete="off"
-                typeahead="b as b.value for b in listCommunes | filter:$viewValue | limitTo:8" class="form-control"
+                autocomplete="off"
+                typeahead-on-select="onSelectCommune($item, $model, $label)"
+                uib-typeahead="b as b.value for b in listCommunes | filter:$viewValue | limitTo:8" class="form-control"
                 typeahead-on-select="currentBracelet.cd_com=$item.id" />
 
             </div>
@@ -61,7 +63,7 @@
                 <input id="lieudit"  placeholder="Lieux dits" type="text"
                 ng-model="selectedLieuDit"
                  autocomplete="off"
-                typeahead="b as b.synonyme for b in listLieuDits | filter:$viewValue | orderBy:'synonyme'  | limitTo:20" class="form-control"
+                uib-typeahead="b as b.synonyme for b in listLieuDits | filter:$viewValue | orderBy:'synonyme'  | limitTo:20" class="form-control"
                 typeahead-on-select="currentBracelet.pk_nom_lieudit=$item.id"  required/>
             </div>
             <div class="checkbox">
@@ -83,7 +85,7 @@
             <label>Date exacte</label>
 
             <div class="input-group">
-                <input type="text" class="form-control" datepicker-popup="d/M/yy" ng-model="currentBracelet.date_exacte" is-open="status.opened" close-text="Close"/>
+                <input type="text" class="form-control" uib-datepicker-popup="d/M/yy" ng-model="currentBracelet.date_exacte" is-open="status.opened" close-text="Close"/>
                 <span class="input-group-btn">
                     <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                 </span>
@@ -92,14 +94,14 @@
                 <label>Auteur constat</label>
                 <input id="auteur_constat" class="form-control"  placeholder="Auteur constat" type="text"
                 ng-model="currentBracelet.auteur_constat"
-                typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir' | limitTo:8" class="form-control"/>
+                uib-typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir' | limitTo:8" class="form-control"/>
             </div>
 
             <div class="form-group">
                 <label>Auteur tir</label>
                 <input id="auteur_tir" class="form-control"  placeholder="Auteur tir" type="text"
                 ng-model="currentBracelet.auteur_tir"
-                typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir'  | limitTo:8" class="form-control"/>
+                uib-typeahead="b.auteur_tir for b in listAuteurs | filter:$viewValue | orderBy:'auteur_tir'  | limitTo:8" class="form-control"/>
             </div>
             <div><label>Mode de chasse</label><span thesaurus idtype="3"  stf="libelle" my-directive-var="currentBracelet.mode_chasse"  is-required="true"></span></div>
         </fieldset>
