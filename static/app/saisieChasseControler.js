@@ -1,5 +1,6 @@
 app.controller('listeBraceletCtrl',
   function($scope, $http,  $filter) {
+  $scope.listSaison= [],
 	$scope.listBracelets= [],
 	$scope.listCommunes= [],
 	$scope.listLieuDits = [],
@@ -8,14 +9,18 @@ app.controller('listeBraceletCtrl',
 	$scope.errors=[],
 	$scope.currentBracelet=undefined,
 
-  //@TODO : mettre en paramètre la saison de chasse
-	$http.get("/api/plan_chasse/bracelets_list/4")
+
+	$http.get("/api/plan_chasse/saison")
 		.then(function(response) {
-        	$scope.listBracelets = response.data
+        	$scope.listSaison = response.data
+          $scope.saison = $filter('filter')($scope.listSaison, {current:true})[0]['id'];
+          $scope.loadBraceletList();
     	})
     	.catch( function(response) {
         	$scope.errors.push(response.data.message);
     	});
+
+
 
     $http.get('/api/lieux/communes')
 	    .then(function(response) {
@@ -44,6 +49,16 @@ app.controller('listeBraceletCtrl',
 		.catch( function(response) {
 			$scope.errors.push(response.data.message);
 		});
+
+    $scope.loadBraceletList = function(){
+      $http.get("/api/plan_chasse/bracelets_list/"+$scope.saison)
+     .then(function(response) {
+           $scope.listBracelets = response.data
+       })
+       .catch( function(response) {
+           $scope.errors.push(response.data.message);
+       });
+    }
   $scope.onSelectBracelet = function ($item, $model, $label) {
     $http.get("/api/plan_chasse/bracelet/"+$item.id)
     .then(function(response) {

@@ -7,6 +7,11 @@
     <div class="panel panel-primary" id ="bracelet-info">
         <div class="panel-heading">Selectionner un Bracelet </div>
         <div class="panel-body">
+            <select class="form-control" 
+              ng-model="saison"
+              ng-change="loadBraceletList()"
+              ng-options="option.id as option.saison for option in listSaison  | orderBy:'saison'">
+            </select>
             <input type="text" ng-model="selectedBracelet"
             uib-typeahead="b as b.no_bracelet for b in listBracelets | filter:$viewValue | orderBy:'no_bracelet' | limitTo:15"
             typeahead-on-select="onSelectBracelet($item, $model, $label)"
