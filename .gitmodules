@@ -1,0 +1,3 @@
+[submodule "modules/UsersHub-authentification-module"]
+	path = modules/UsersHub-authentification-module
+	url = https://github.com/PnX-SI/UsersHub-authentification-module.git

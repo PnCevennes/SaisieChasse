@@ -1,13 +1,14 @@
-    <div class="jumbotron">
+    <!-- <div class="jumbotron">
         <div class="container" >
             <h1>Plan de chasse</h1>
         </div>
-    </div>
+    </div> -->
+    <div ng-include src="'static/app/components/header-tpl.html'"  onload=""  autoscroll=""></div>
 
     <div class="panel panel-primary" id ="bracelet-info">
         <div class="panel-heading">Selectionner un Bracelet </div>
         <div class="panel-body">
-            <select class="form-control" 
+            <select class="form-control"
               ng-model="saison"
               ng-change="loadBraceletList()"
               ng-options="option.id as option.saison for option in listSaison  | orderBy:'saison'">

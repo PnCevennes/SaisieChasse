@@ -6,7 +6,9 @@
     "angular": "^1.6.1",
     "angular-route": "^1.5.3",
     "angular-ui-bootstrap": "^2.4.0",
-    "bootstrap": "^3.3.4"
+    "bootstrap": "^3.3.4",
+    "angular-cookies": "^1.4.0",
+    "angularjs-toaster": "^1.2.0"
   },
   "devDependencies": {},
   "scripts": {
