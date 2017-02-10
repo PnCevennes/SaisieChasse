@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<nav class="navbar navbar-default navbar-static-top navbar-inverse">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -11,7 +11,13 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li ng-class="{active:ctrl.route=='saisie_chasse'}"><a href="#!/saisie_chasse">Cynégetique</a></li>
+        <li ng-class="{active:ctrl.route=='saisie_chasse'}"
+          uib-dropdown on-toggle="toggled(open)">
+            <a href="#!/saisie_chasse" uib-dropdown-toggle>Cynégetique<span class="caret"></span></a>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+              <li role="menuitem"><a href="#!/saisie_chasse">Constats</a></li>
+            </ul>
+        </li>
       </ul>
       <login-form-directive />
     </div>
