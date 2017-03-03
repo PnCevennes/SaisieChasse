@@ -11,7 +11,7 @@ sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\
 
 #installation des librairies
 cd static/
-npm intall
+npm install
 cd ..
 
 #Installation du virtual env
