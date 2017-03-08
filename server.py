@@ -1,13 +1,12 @@
 #coding: utf8
-from flask import Flask, request
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import importlib
-import datetime
 
 db = SQLAlchemy()
 app_globals = {}
 
-def init_app():
+def get_app():
     if app_globals.get('app', False):
         app = app_globals['app']
     else :
@@ -18,7 +17,6 @@ def init_app():
 
     from modules.index import routes
     app.register_blueprint(routes, url_prefix='/')
-
 
     fnauth = importlib.import_module("modules.UsersHub-authentification-module.routes")
     app.register_blueprint(fnauth.routes, url_prefix='/api/auth')
@@ -31,5 +29,7 @@ def init_app():
     app.register_blueprint(tthroutes, url_prefix='/api/thesaurus')
     return app
 
+app = get_app()
+
 if __name__ == '__main__':
-    init_app().run()
+    app.run()
