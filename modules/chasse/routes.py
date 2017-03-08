@@ -1,14 +1,14 @@
 #coding: utf8
 from flask import Blueprint, request
 import json
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
-
-from server import db
 
 from .models import VLieuTirSynonymes, PlanChasse, SaisonChasse
 from ..utils.utilssqlalchemy import json_resp
 
 
+db = SQLAlchemy()
 ltroutes = Blueprint('lieux_tir', __name__)
 
 
@@ -19,7 +19,6 @@ def get_lieutirsyn(id = None):
     q = db.session.query(VLieuTirSynonymes)
 
     if request.args.get('code_com') :
-        print 'code_com', request.args.get('code_com')
         q = q.filter_by(code_com = request.args.get('code_com'))
 
     if id:

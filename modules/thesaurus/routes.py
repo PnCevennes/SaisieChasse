@@ -1,11 +1,11 @@
 #coding: utf8
 from flask import Blueprint, request
-
-from server import db
+from flask_sqlalchemy import SQLAlchemy
 
 from .models import Thesaurus
 from ..utils.utilssqlalchemy import json_resp
 
+db = SQLAlchemy()
 tthroutes = Blueprint('thesaurus', __name__)
 
 @tthroutes.route('/vocabulary/<int:id>', methods=['GET'])

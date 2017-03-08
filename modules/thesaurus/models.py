@@ -1,9 +1,10 @@
 #coding: utf8
-from server import db
+from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
 
+db = SQLAlchemy()
 class Thesaurus(serializableModel, db.Model):
     __tablename__ = 'tthesaurus'
     __table_args__ = {'schema':'chasse'}

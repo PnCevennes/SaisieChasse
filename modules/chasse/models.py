@@ -1,5 +1,6 @@
 #coding: utf8
-from server import db
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
