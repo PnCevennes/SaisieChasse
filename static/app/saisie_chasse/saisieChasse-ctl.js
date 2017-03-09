@@ -1,5 +1,5 @@
 app.controller('saisieChasseCtrl',
-[ '$scope', '$http',  '$filter', 'loginSrv',function($scope, $http,  $filter, loginSrv) {
+[ '$scope', '$http',  '$filter', 'toaster', 'loginSrv',function($scope, $http,  $filter, toaster, loginSrv) {
   var self = this;
   $scope.listSaison= [],
 	$scope.listBracelets= [],
@@ -109,13 +109,13 @@ app.controller('saisieChasseCtrl',
     currentData.auteur_tir = [].concat(currentData.auteur_tir).join();
 		$http.post('/api/plan_chasse/bracelet/'+currentData.id, currentData)
 	        .then(function(response) {
-	            alert(response.data.message);
+              toaster.pop('success', response.data.message ,'', 3000, 'trustedHtml');
 	            $scope.currentBracelet=undefined;
 	            $scope.selectedBracelet=undefined;
 	        })
 	        .catch( function(response) {
               $scope.currentBracelet.date_exacte = new Date($filter('date')(data.date_exacte, 'yyyy-MM-dd'));
-	            alert("Error: "+response.error+" Post to server failed.\nStatus: "+response.status);
+              toaster.pop('error', "Erreur d'enregistrement", response.error, 5000, 'trustedHtml');
 	        });
 	};
 
