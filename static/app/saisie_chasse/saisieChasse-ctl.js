@@ -1,5 +1,6 @@
-app.controller('listeBraceletCtrl',
-  function($scope, $http,  $filter) {
+app.controller('saisieChasseCtrl',
+[ '$scope', '$http',  '$filter', 'loginSrv',function($scope, $http,  $filter, loginSrv) {
+  var self = this;
   $scope.listSaison= [],
 	$scope.listBracelets= [],
 	$scope.listCommunes= [],
@@ -9,6 +10,7 @@ app.controller('listeBraceletCtrl',
 	$scope.errors=[],
 	$scope.currentBracelet=undefined,
 
+  self.userRights = loginSrv.getCurrentUserRights();
 
 	$http.get("/api/plan_chasse/saison")
 		.then(function(response) {
@@ -112,6 +114,7 @@ app.controller('listeBraceletCtrl',
 	            $scope.selectedBracelet=undefined;
 	        })
 	        .catch( function(response) {
+              $scope.currentBracelet.date_exacte = new Date($filter('date')(data.date_exacte, 'yyyy-MM-dd'));
 	            alert("Error: "+response.error+" Post to server failed.\nStatus: "+response.status);
 	        });
 	};
@@ -125,7 +128,7 @@ app.controller('listeBraceletCtrl',
 	};
 
 	$scope.parseInt = parseInt;
-});
+}]);
 
 
 

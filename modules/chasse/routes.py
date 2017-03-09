@@ -7,6 +7,8 @@ from sqlalchemy import select
 from .models import VLieuTirSynonymes, PlanChasse, SaisonChasse
 from ..utils.utilssqlalchemy import json_resp
 
+from pypnusershub import routes as fnauth
+
 
 db = SQLAlchemy()
 ltroutes = Blueprint('lieux_tir', __name__)
@@ -45,14 +47,16 @@ def get_bracelet_detail(id = None):
     return data.as_dict()
 
 @pcroutes.route('/bracelet/<int:id>', methods=['POST', 'PUT'])
+@fnauth.check_auth(3, False)
 def insertupdate_bracelet_detail(id = None):
-    data = json.loads(request.data)
+    data = json.loads(request.data.decode())
     o = PlanChasse(**data)
     db.session.merge(o)
     try:
         db.session.commit()
         return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec success'}), 200, {'ContentType':'application/json'}
     except Exception as e:
+        print (e)
         db.session.rollback()
         return json.dumps({'success':False, 'message':'Impossible de sauvegarder l\'enregistrement'}), 500, {'ContentType':'application/json'}
 

@@ -7,15 +7,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Obs ASC</a>
+      <a class="navbar-brand" href="#">Obs SC</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li ng-class="{active:ctrl.route=='saisie_chasse'}"
-          uib-dropdown on-toggle="toggled(open)">
-            <a href="#!/saisie_chasse" uib-dropdown-toggle>Cynégetique<span class="caret"></span></a>
+          uib-dropdown on-toggle="toggled(open)" ng-if="ctrl.userRights.medium" >
+            <a href="#!/saisie_chasse" uib-dropdown-toggle>Saisie<span class="caret"></span></a>
             <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-              <li role="menuitem"><a href="#!/saisie_chasse">Constats</a></li>
+              <li role="menuitem"><a href="#!/saisie_chasse">Constats chasse</a></li>
             </ul>
         </li>
       </ul>

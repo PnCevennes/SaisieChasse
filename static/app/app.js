@@ -46,7 +46,14 @@ app.config(['$routeProvider',
             })
             .when('/saisie_chasse', {
                 templateUrl: 'static/app/saisie_chasse/saisieChasse-tpl.html',
-                controller: 'listeBraceletCtrl'
+                controller: 'saisieChasseCtrl',
+                controllerAs: 'ctrl',
+                access: {restricted: true, "level":3}
+            })
+            .when('/', {
+                templateUrl: 'static/app/home_page/home-tpl.html',
+                controller: 'homePageCtrl',
+                controllerAs: 'ctrl'
             }).
             otherwise({
                 redirectTo: '/'

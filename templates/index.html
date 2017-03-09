@@ -5,18 +5,19 @@
 
 <meta charset="UTF-8">
 
-<link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap-theme.min.css"/>
 
 <script src="static/node_modules/angular/angular.min.js"></script>
 <script src="static/node_modules/angular-route/angular-route.min.js"></script>
 
 <script src="static/node_modules/angularjs-toaster/toaster.min.js"></script>
-<script src="static/node_modules/angular-cookies/angular-cookies.js"></script>
+<link href="static/node_modules/angularjs-toaster/toaster.min.css" rel="stylesheet" />
 
+<script src="static/node_modules/angular-cookies/angular-cookies.js"></script>
 
 <script src="static/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
 <script src="static/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+<link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap-theme.min.css"/>
 
 <style type="text/css">
     /* Forms */
@@ -28,6 +29,8 @@
 </head>
 
 <body>
+    <toaster-container toaster-options="{'time-out': 7000,'position-class':'toast-top-center'}"></toaster-container>
+
     <div ng-view></div>
 
     <!--Chargement des controleurs-->
@@ -35,6 +38,7 @@
     <script src="static/app/constants.js"></script>
 
     <script src="static/app/saisie_chasse/saisieChasse-ctl.js"></script>
+    <script src="static/app/home_page/homePage-ctl.js"></script>
     <script src="static/app/login/loginControler.js" charset="utf-8"></script>
 </body>
 </html>
