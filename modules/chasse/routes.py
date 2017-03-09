@@ -47,9 +47,10 @@ def get_bracelet_detail(id = None):
     return data.as_dict()
 
 @pcroutes.route('/bracelet/<int:id>', methods=['POST', 'PUT'])
-@fnauth.check_auth(3, False)
-def insertupdate_bracelet_detail(id = None):
+@fnauth.check_auth(3, True)
+def insertupdate_bracelet_detail(id = None, id_role=None):
     data = json.loads(request.data.decode())
+    data['numerisateur'] = id_role
     o = PlanChasse(**data)
     db.session.merge(o)
     try:

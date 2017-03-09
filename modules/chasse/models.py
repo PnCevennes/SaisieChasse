@@ -101,3 +101,4 @@ class PlanChasse(serializableModel, db.Model):
     cors_indetermine = db.Column(db.Boolean)
     long_dagues_indertermine = db.Column(db.Boolean)
     long_mandibules_indertermine = db.Column(db.Boolean)
+    numerisateur = db.Column(db.Integer)
