@@ -55,7 +55,7 @@ def insertupdate_bracelet_detail(id = None, id_role=None):
     db.session.merge(o)
     try:
         db.session.commit()
-        return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec success'}), 200, {'ContentType':'application/json'}
+        return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec succès !'}), 200, {'ContentType':'application/json'}
     except Exception as e:
         print (e)
         db.session.rollback()
