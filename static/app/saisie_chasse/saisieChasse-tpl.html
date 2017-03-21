@@ -61,7 +61,7 @@
                 autocomplete="off"
                 typeahead-on-select="onSelectCommune($item, $model, $label)"
                 uib-typeahead="b as b.value for b in listCommunes | filter:$viewValue | limitTo:8" class="form-control"
-                typeahead-on-select="currentBracelet.cd_com=$item.id" />
+                typeahead-on-select="currentBracelet.insee=$item.id" />
 
             </div>
             <div>
@@ -69,7 +69,7 @@
                 <input id="lieudit"  placeholder="Lieux dits" type="text"
                 ng-model="selectedLieuDit"
                  autocomplete="off"
-                uib-typeahead="b as b.synonyme for b in listLieuDits | filter:$viewValue | orderBy:'synonyme'  | limitTo:20" class="form-control"
+                uib-typeahead="b as b.syn_lieudit for b in listLieuDits | filter:$viewValue | orderBy:'syn_lieudit'  | limitTo:20" class="form-control"
                 typeahead-on-select="currentBracelet.pk_nom_lieudit=$item.id"  required/>
             </div>
             <div class="checkbox">
