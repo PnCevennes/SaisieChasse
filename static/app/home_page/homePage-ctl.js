@@ -6,7 +6,7 @@ app.controller('homePageCtrl', ['$scope', 'loginSrv', '$http', function($scope,
 
   $http({
     method: 'GET',
-    url: '/api/bilan/nomvern_massif'
+    url: 'api/bilan/nomvern_massif'
   }).then(
     function successCallback(response) {
       self.taxons = response.data;
@@ -23,7 +23,7 @@ app.controller('homePageCtrl', ['$scope', 'loginSrv', '$http', function($scope,
   self.drawGraphs = function() {
     $http({
       method: 'GET',
-      url: '/api/bilan/attribution_massif?nom_vern=' + self.selectedTaxon +
+      url: 'api/bilan/attribution_massif?nom_vern=' + self.selectedTaxon +
         '&massif=' + self.selectedMassif
     }).then(
       function successCallback(response) {
