@@ -8,6 +8,9 @@ from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 from sqlalchemy import Table, create_engine, MetaData
 
+import decimal
+
+
 db = SQLAlchemy()
 class GenericTable:
     def __init__(self, tableName, schemaName):
@@ -22,7 +25,7 @@ class GenericTable:
 
 def serializeQuery( data, columnDef):
     rows = [
-        {c['name'] : getattr(row, c['name']) for c in columnDef if getattr(row, c['name']) != None } for row in data
+         _normalize(row, columnDef) for row in data
     ]
     return rows
 
@@ -37,10 +40,13 @@ def _normalize(obj, columns):
     '''
     out = {}
     for col in columns:
-        if isinstance(col.type, db.Date):
-            out[col.name] = str(getattr(obj, col.name))
-        else:
-            out[col.name] = getattr(obj, col.name)
+        if getattr(obj, col['name']) != None:
+            if isinstance(col['type'], db.Date):
+                out[col['name']] = str(getattr(obj, col['name']))
+            if isinstance(col['type'], db.Numeric):
+                out[col['name']] = float(str(getattr(obj, col['name'])))
+            else:
+                out[col['name']] = getattr(obj, col['name'])
     return out
 
 def normalize(obj, *parents):
