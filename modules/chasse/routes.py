@@ -19,7 +19,7 @@ def get_lieutirsyn(id = None):
     q = db.session.query(VLieuTirSynonymes)
 
     if request.args.get('code_com') :
-        print 'code_com', request.args.get('code_com')
+        print ('code_com', request.args.get('code_com'))
         q = q.filter_by(code_com = request.args.get('code_com'))
 
     if id:
