@@ -1,12 +1,12 @@
 #coding: utf8
 
-from server import db
-
-
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime
 
 import datetime
 import json
+
+db = SQLAlchemy()
 
 class serializableModel(db.Model):
     __abstract__ = True

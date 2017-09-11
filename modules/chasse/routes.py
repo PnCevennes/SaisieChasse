@@ -1,14 +1,16 @@
 #coding: utf8
 from flask import Blueprint, request
 import json
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select
-
-from server import db
 
 from .models import VLieuTirSynonymes, PlanChasse, SaisonChasse
 from ..utils.utilssqlalchemy import json_resp
 
+from pypnusershub import routes as fnauth
 
+
+db = SQLAlchemy()
 ltroutes = Blueprint('lieux_tir', __name__)
 
 
@@ -19,7 +21,6 @@ def get_lieutirsyn(id = None):
     q = db.session.query(VLieuTirSynonymes)
 
     if request.args.get('code_com') :
-        print ('code_com', request.args.get('code_com'))
         q = q.filter_by(code_com = request.args.get('code_com'))
 
     if id:
@@ -46,14 +47,17 @@ def get_bracelet_detail(id = None):
     return data.as_dict()
 
 @pcroutes.route('/bracelet/<int:id>', methods=['POST', 'PUT'])
-def insertupdate_bracelet_detail(id = None):
-    data = json.loads(request.data)
+@fnauth.check_auth(3, True)
+def insertupdate_bracelet_detail(id = None, id_role=None):
+    data = json.loads(request.data.decode())
+    data['numerisateur'] = id_role
     o = PlanChasse(**data)
     db.session.merge(o)
     try:
         db.session.commit()
-        return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec success'}), 200, {'ContentType':'application/json'}
+        return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec succès !'}), 200, {'ContentType':'application/json'}
     except Exception as e:
+        print (e)
         db.session.rollback()
         return json.dumps({'success':False, 'message':'Impossible de sauvegarder l\'enregistrement'}), 500, {'ContentType':'application/json'}
 

@@ -1,5 +1,6 @@
 #coding: utf8
-from server import db
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
@@ -100,3 +101,4 @@ class PlanChasse(serializableModel, db.Model):
     cors_indetermine = db.Column(db.Boolean)
     long_dagues_indertermine = db.Column(db.Boolean)
     long_mandibules_indertermine = db.Column(db.Boolean)
+    numerisateur = db.Column(db.Integer)

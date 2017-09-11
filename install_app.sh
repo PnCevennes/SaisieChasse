@@ -11,13 +11,13 @@ sed -i "s/SQLALCHEMY_DATABASE_URI = .*$/SQLALCHEMY_DATABASE_URI = \"postgresql:\
 
 #installation des librairies
 cd static/
-npm intall
+npm install
 cd ..
 
 #Installation du virtual env
 echo "Installation du virtual env..."
 virtualenv venv
-virtualenv -p sr/bin/python2.7 venv #TODO adapater le chemin à la version de python du server
+virtualenv -p /usr/bin/python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
