@@ -19,7 +19,11 @@ def getNomVernMassif():
     tableBilanAttributionMassif = GenericTable('chasse.v_rapport_bilan_attribution_massif', 'chasse')
     col = tableBilanAttributionMassif.tableDef.columns
     q = db.session.query(col.nom_vern,col.massif).distinct()
-    results = q.all()
+    try:
+        results = q.all()
+    except:
+        db.session.rollback()
+        raise
     data = {}
     for d in db.session.query(col.nom_vern,col.massif).distinct():
         try:
@@ -35,7 +39,11 @@ def getNomVernMassif():
 def getBilanAttributionMassif():
     tableBilanAttributionMassif = GenericTable('chasse.v_rapport_bilan_attribution_massif', 'chasse')
     q = db.session.query(tableBilanAttributionMassif.tableDef)
-    results = q.filter(getattr(tableBilanAttributionMassif.tableDef.columns,'nom_vern') == request.args.get('nom_vern'))\
-        .filter(getattr(tableBilanAttributionMassif.tableDef.columns,'massif') ==request.args.get('massif'))\
-        .all()
+    try:
+        results = q.filter(getattr(tableBilanAttributionMassif.tableDef.columns,'nom_vern') == request.args.get('nom_vern'))\
+            .filter(getattr(tableBilanAttributionMassif.tableDef.columns,'massif') ==request.args.get('massif'))\
+            .all()
+    except:
+        db.session.rollback()
+        raise
     return serializeQuery(results,q.column_descriptions)
