@@ -1,22 +1,28 @@
-#coding: utf8
+# coding: utf8
 from flask_sqlalchemy import SQLAlchemy
-db = SQLAlchemy()
-
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
 from geoalchemy2 import Geometry
 
 
+db = SQLAlchemy()
+
+
 class LieuTirSynonymes(serializableModel, db.Model):
     __tablename__ = 'lieu_tir_synonymes'
-    __table_args__ = {'schema':'chasse'}
+    __table_args__ = {'schema': 'chasse'}
     id = db.Column(db.Integer, primary_key=True)
-    code_lieudit = db.Column(db.Integer, ForeignKey("chasse.lieux_tir.code_lieudit"), nullable=False)
+    code_lieudit = db.Column(
+        db.Integer,
+        ForeignKey("chasse.lieux_tir.code_lieudit"),
+        nullable=False
+    )
     libelle_lieudit = db.Column(db.Unicode)
+
 
 class VLieuTirSynonymes(serializableModel, db.Model):
     __tablename__ = 'v_lieu_dit_synonymes'
-    __table_args__ = {'schema':'chasse'}
+    __table_args__ = {'schema': 'chasse'}
     id = db.Column(db.Integer, primary_key=True)
     code_lieudit = db.Column(db.Integer)
     nom_lieudit = db.Column(db.Unicode)
@@ -25,11 +31,12 @@ class VLieuTirSynonymes(serializableModel, db.Model):
     nom_com = db.Column(db.Unicode)
     syn_lieudit = db.Column(db.Unicode)
 
+
 class LieuTir(serializableModel, db.Model):
     __tablename__ = 'lieu_tir'
-    __table_args__ = {'schema':'chasse'}
+    __table_args__ = {'schema': 'chasse'}
     id = db.Column(db.Integer, primary_key=True)
-    geom =  db.Column('geom', Geometry('MULTIPOLYGON', srid=2154))
+    geom = db.Column('geom', Geometry('MULTIPOLYGON', srid=2154))
     nom_lieudit = db.Column(db.Unicode)
     code_com = db.Column(db.Integer)
     nom_com = db.Column(db.Unicode)
@@ -42,14 +49,17 @@ class LieuTir(serializableModel, db.Model):
         feature = Feature(
                 id=self.id,
                 geometry=geometry,
-                properties= {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name!='geom'}
+                properties={
+                    c.name: getattr(self, c.name)
+                    for c in self.__table__.columns if c.name != 'geom'
+                }
             )
         return feature
 
 
 class SaisonChasse(serializableModel, db.Model):
     __tablename__ = 'saison_chasse'
-    __table_args__ = {'schema':'chasse'}
+    __table_args__ = {'schema': 'chasse'}
     id = db.Column(db.Integer, primary_key=True)
     date_min = db.Column(db.DateTime)
     date_max = db.Column(db.DateTime)
@@ -61,10 +71,9 @@ class SaisonChasse(serializableModel, db.Model):
     date_fin_chevreuils = db.Column(db.DateTime)
 
 
-
 class PlanChasse(serializableModel, db.Model):
     __tablename__ = 'plan_chasse'
-    __table_args__ = {'schema':'chasse'}
+    __table_args__ = {'schema': 'chasse'}
     id = db.Column(db.Integer, primary_key=True)
     massif_affecte = db.Column(db.Unicode)
     massif_realise = db.Column(db.Unicode)

@@ -20,7 +20,8 @@ db = SQLAlchemy()
 
 class serializableModel(db.Model):
     """
-    Classe qui ajoute une méthode de transformation des données de l'objet en tableau json
+    Classe qui ajoute une méthode de transformation des données
+    de l'objet en tableau json
     Paramètres :
        -
     """
@@ -31,27 +32,28 @@ class serializableModel(db.Model):
         :param recursif: Spécifie si on veut que les sous objet (relationship) soit égalament sérialisé
         :param columns: liste des columns qui doivent être prisent en compte
         """
-        obj={}
-        if  (not columns) :
+        obj = {}
+        if (not columns):
             columns = self.__table__.columns
 
         for prop in class_mapper(self.__class__).iterate_properties:
-            if (isinstance(prop, ColumnProperty) and (prop.key in columns)) :
+            if (isinstance(prop, ColumnProperty) and (prop.key in columns)):
                 column = self.__table__.columns[prop.key]
-                if isinstance(column.type, (db.Date, db.DateTime, UUID)) :
-                    obj[prop.key] =str(getattr(self, prop.key))
-                elif isinstance(column.type, db.Numeric) :
-                    obj[prop.key] =float(getattr(self, prop.key))
-                elif not isinstance(column.type, Geometry) :
-                    obj[prop.key] =getattr(self, prop.key)
-            if ((isinstance(prop,RelationshipProperty)) and (recursif)):
-                if hasattr( getattr(self, prop.key), '__iter__') :
+                if isinstance(column.type, (db.Date, db.DateTime, UUID)):
+                    obj[prop.key] = str(getattr(self, prop.key))
+                elif isinstance(column.type, db.Numeric):
+                    obj[prop.key] = float(getattr(self, prop.key))
+                elif not isinstance(column.type, Geometry):
+                    obj[prop.key] = getattr(self, prop.key)
+            if ((isinstance(prop, RelationshipProperty)) and (recursif)):
+                if hasattr(getattr(self, prop.key), '__iter__'):
                     obj[prop.key] = [d.as_dict(recursif) for d in getattr(self, prop.key)]
-                else :
-                    if (getattr(getattr(self, prop.key), "as_dict", None)) :
+                else:
+                    if (getattr(getattr(self, prop.key), "as_dict", None)):
                         obj[prop.key] = getattr(self, prop.key).as_dict(recursif)
 
         return obj
+
 
 class serializableGeoModel(serializableModel):
     __abstract__ = True

@@ -1,4 +1,4 @@
-#coding: utf8
+# coding: utf8
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import importlib
@@ -6,10 +6,11 @@ import importlib
 db = SQLAlchemy()
 app_globals = {}
 
+
 def get_app():
     if app_globals.get('app', False):
         app = app_globals['app']
-    else :
+    else:
         app = Flask(__name__)
 
     app.config.from_pyfile('config.py')
@@ -32,6 +33,7 @@ def get_app():
     app.register_blueprint(realroutes, url_prefix='/api/bilan')
 
     return app
+
 
 app = get_app()
 

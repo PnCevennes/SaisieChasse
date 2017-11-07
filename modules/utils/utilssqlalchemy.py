@@ -1,4 +1,4 @@
-#coding: utf8
+# coding: utf8
 '''
 Fonctions utilitaires
 '''
@@ -12,6 +12,8 @@ import decimal
 
 
 db = SQLAlchemy()
+
+
 class GenericTable:
     def __init__(self, tableName, schemaName):
         engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
@@ -23,15 +25,21 @@ class GenericTable:
     def serialize(self, data):
         return serializeQuery(data, self.columns)
 
-def serializeQuery( data, columnDef):
+
+def serializeQuery(data, columnDef):
     rows = [
          _normalize(row, columnDef) for row in data
     ]
     return rows
 
-def serializeQueryOneResult( row, columnDef):
-    row = {c['name'] : getattr(row, c['name']) for c in columnDef if getattr(row, c['name']) != None }
+
+def serializeQueryOneResult(row, columnDef):
+    row = {
+        c['name']: getattr(row, c['name'])
+        for c in columnDef if getattr(row, c['name']) is not None
+    }
     return row
+
 
 def _normalize(obj, columns):
     '''
@@ -40,7 +48,7 @@ def _normalize(obj, columns):
     '''
     out = {}
     for col in columns:
-        if getattr(obj, col['name']) != None:
+        if getattr(obj, col['name']) is not None:
             if isinstance(col['type'], db.Date):
                 out[col['name']] = str(getattr(obj, col['name']))
             if isinstance(col['type'], db.Numeric):
@@ -48,6 +56,7 @@ def _normalize(obj, columns):
             else:
                 out[col['name']] = getattr(obj, col['name'])
     return out
+
 
 def normalize(obj, *parents):
     '''
@@ -64,6 +73,7 @@ def normalize(obj, *parents):
             out.update(_normalize(obj, p().__table__.columns))
         return out
 
+
 def json_resp(fn):
     '''
     Décorateur transformant le résultat renvoyé par une vue
@@ -76,6 +86,9 @@ def json_resp(fn):
             res, status = res
         else:
             status = 200
-        return Response(json.dumps(res),
-                status=status, mimetype='application/json')
+        return Response(
+            json.dumps(res),
+            status=status,
+            mimetype='application/json'
+        )
     return _json_resp

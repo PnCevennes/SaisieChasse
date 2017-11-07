@@ -1,4 +1,4 @@
-#coding: utf8
+# coding: utf8
 from flask import Blueprint, request
 import json
 from flask_sqlalchemy import SQLAlchemy
@@ -17,18 +17,18 @@ ltroutes = Blueprint('lieux_tir', __name__)
 @ltroutes.route('/', methods=['GET'])
 @ltroutes.route('/<int:id>', methods=['GET'])
 @json_resp
-def get_lieutirsyn(id = None):
+def get_lieutirsyn(id=None):
     q = db.session.query(VLieuTirSynonymes)
 
-    if request.args.get('code_com') :
-        q = q.filter_by(code_com = request.args.get('code_com'))
+    if request.args.get('code_com'):
+        q = q.filter_by(code_com=request.args.get('code_com'))
 
     if id:
         q = q.filter_by(id=id)
 
     try:
         data = q.all()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
     return [attribut.as_dict() for attribut in data]
@@ -42,40 +42,53 @@ def get_communes():
         .distinct(VLieuTirSynonymes.nom_com)
     try:
         data = q.all()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
 
-    return  [{"value" : attribut.nom_com, "id" : int(attribut.code_com) } for attribut in data]
+    return [
+        {"value": attribut.nom_com, "id": int(attribut.code_com)}
+        for attribut in data
+    ]
+
 
 pcroutes = Blueprint('plan_chasse', __name__)
 
+
 @pcroutes.route('/bracelet/<int:id>', methods=['GET'])
 @json_resp
-def get_bracelet_detail(id = None):
+def get_bracelet_detail(id=None):
     q = db.session.query(PlanChasse).filter_by(id=id)
 
     try:
         data = q.first()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
 
     return data.as_dict()
 
+
 @pcroutes.route('/bracelet/<int:id>', methods=['POST', 'PUT'])
 @fnauth.check_auth(3, True)
-def insertupdate_bracelet_detail(id = None, id_role=None):
+def insertupdate_bracelet_detail(id=None, id_role=None):
     data = json.loads(request.data.decode())
     data['numerisateur'] = id_role
     o = PlanChasse(**data)
     db.session.merge(o)
     try:
         db.session.commit()
-        return json.dumps({'success':True, 'message':'Enregistrement sauvegardé avec succès !'}), 200, {'ContentType':'application/json'}
+        return json.dumps({
+            'success': True,
+            'message': 'Enregistrement sauvegardé avec succès !'
+        }), 200, {'ContentType': 'application/json'}
     except Exception as e:
         db.session.rollback()
-        return json.dumps({'success':False, 'message':'Impossible de sauvegarder l\'enregistrement'}), 500, {'ContentType':'application/json'}
+        return json.dumps({
+            'success': False,
+            'message': 'Impossible de sauvegarder l\'enregistrement'
+        }), 500, {'ContentType': 'application/json'}
+
 
 @pcroutes.route('/auteurs', methods=['GET'])
 @json_resp
@@ -87,10 +100,11 @@ def get_auteurs():
 
     try:
         data = db.session.query(q).all()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
-    return [{"auteur_tir" : a } for a in data]
+    return [{"auteur_tir": a} for a in data]
+
 
 @pcroutes.route('/saison', methods=['GET'])
 @json_resp
@@ -98,23 +112,27 @@ def get_saison_list():
     q = db.session.query(SaisonChasse)
     try:
         data = q.all()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
 
     return [a.as_dict() for a in data]
 
+
 @pcroutes.route('/bracelets_list/<int:saison>', methods=['GET'])
 @json_resp
-def get_bracelet_list(saison = None):
+def get_bracelet_list(saison=None):
     q = db.session \
         .query(PlanChasse.id, PlanChasse.no_bracelet) \
-        .filter_by(fk_saison = saison)\
+        .filter_by(fk_saison=saison)\
         .distinct()
 
     try:
         data = q.all()
-    except:
+    except Exception as e:
         db.session.rollback()
         raise
-    return  [{"no_bracelet" : attribut.no_bracelet, "id" : int(attribut.id) } for attribut in data]
+    return [
+        {"no_bracelet": attribut.no_bracelet, "id": int(attribut.id)}
+        for attribut in data
+    ]
