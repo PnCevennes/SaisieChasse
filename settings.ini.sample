@@ -1,28 +1,34 @@
-#config PostgreSQL
+
+app_name=saisiechasse
+
+####################################
+###config Python
+####################################
+venv_dir=venv
+#path vers python à n'utiliser que dans le cas de python3
+python_path=/usr/bin/python3.4
+
+
+####################################
+###config PostgreSQL
+####################################
 
 #effacer la base de donnée existante lors de l'installation
 drop_apps_db=true
 
 #host hébergeant la base de données
 db_host=localhost
-
 #port de la base de données
 db_port=5432
 
 #nom de la base de données de l'application
-db_name=taxhubdb
+db_name=chasse
 
 #nom de l'utilisateur propriétaire de la base PostgreSQL
-user_pg=geonatuser
+user_pg=monuser
 
-#user propriétaire de la base geonaturedb
+#user propriétaire de la base chasse
 user_pg_pass=monpassachanger
-
-#config Python
-#Python3 est requis
-
-#path vers python
-python_path=/usr/bin/python3.4
 
 ###localisation du schema utilisateur
 #valeurs possibles : 'local' ou 'foreign'
@@ -35,3 +41,11 @@ usershub_db=usershubdb
 usershub_port=5432
 usershub_user=usershubuser
 usershub_pass=monpassachanger
+
+
+####################################
+###config Gunicorn
+####################################
+gun_num_workers=4
+gun_host=0.0.0.0
+gun_port=8000

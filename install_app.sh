@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "Arret de l'application..."
+sudo -s supervisorctl stop saisechasse
+
 . settings.ini
 
 echo "Création du fichier de configuration ..."
@@ -16,14 +19,27 @@ cd ..
 
 #Installation du virtual env
 echo "Installation du virtual env..."
-virtualenv venv
-virtualenv -p /usr/bin/python3 venv
+virtualenv $venv_dir
+
+if [[ $python_path ]]; then
+  virtualenv -p $python_path $venv_dir
+fi
+
+
 source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 
-# #création d'un fichier de configuration
-# cp static/app/constants.js.sample static/app/constants.js
-#
-# #affectation des droits sur le répertoire static/medias
-# chmod 775 static/medias
+#création d'un fichier de configuration
+if [ ! -f static/app/constants.js ]; then
+  echo 'Fichier de configuration non existant'
+  cp static/app/constants.js.sample static/app/constants.js
+fi
+
+#Lancement de l'application
+DIR=$(readlink -e "${0%/*}")
+sudo -s cp saisiechasse-service.conf /etc/supervisor/conf.d/
+sudo -s sed -i "s%APP_PATH%${DIR}%" /etc/supervisor/conf.d/saisiechasse-service.conf
+
+sudo -s supervisorctl reread
+sudo -s supervisorctl reload
