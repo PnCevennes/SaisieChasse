@@ -26,6 +26,7 @@ class serializableModel(db.Model):
        -
     """
     __abstract__ = True
+
     def as_dict(self, recursif=False, columns=()):
         """
         Méthode qui renvoie les données de l'objet sous la forme d'un dictionnaire
@@ -37,20 +38,26 @@ class serializableModel(db.Model):
             columns = self.__table__.columns
 
         for prop in class_mapper(self.__class__).iterate_properties:
-            if (isinstance(prop, ColumnProperty) and (prop.key in columns)):
-                column = self.__table__.columns[prop.key]
-                if isinstance(column.type, (db.Date, db.DateTime, UUID)):
-                    obj[prop.key] = str(getattr(self, prop.key))
-                elif isinstance(column.type, db.Numeric):
-                    obj[prop.key] = float(getattr(self, prop.key))
-                elif not isinstance(column.type, Geometry):
-                    obj[prop.key] = getattr(self, prop.key)
-            if ((isinstance(prop, RelationshipProperty)) and (recursif)):
-                if hasattr(getattr(self, prop.key), '__iter__'):
-                    obj[prop.key] = [d.as_dict(recursif) for d in getattr(self, prop.key)]
-                else:
-                    if (getattr(getattr(self, prop.key), "as_dict", None)):
-                        obj[prop.key] = getattr(self, prop.key).as_dict(recursif)
+            if getattr(self, prop.key) is None:
+                pass
+            else:
+                if (isinstance(prop, ColumnProperty) and (prop.key in columns)):
+                    column = self.__table__.columns[prop.key]
+                    if isinstance(column.type, (db.Date, db.DateTime, UUID)):
+                        obj[prop.key] = str(getattr(self, prop.key))
+                    elif isinstance(column.type, db.Numeric):
+                        obj[prop.key] = float(getattr(self, prop.key))
+                    elif not isinstance(column.type, Geometry):
+                        obj[prop.key] = getattr(self, prop.key)
+                if ((isinstance(prop, RelationshipProperty)) and (recursif)):
+                    if hasattr(getattr(self, prop.key), '__iter__'):
+                        obj[prop.key] = [
+                            d.as_dict(recursif)
+                            for d in getattr(self, prop.key)
+                        ]
+                    else:
+                        if (getattr(getattr(self, prop.key), "as_dict", None)):
+                            obj[prop.key] = getattr(self, prop.key).as_dict(recursif)
 
         return obj
 
