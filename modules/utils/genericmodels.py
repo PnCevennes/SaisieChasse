@@ -1,4 +1,4 @@
-#coding: utf8
+# coding: utf8
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime
@@ -29,18 +29,24 @@ class serializableModel(db.Model):
 
     def as_dict(self, recursif=False, columns=()):
         """
-        Méthode qui renvoie les données de l'objet sous la forme d'un dictionnaire
-        :param recursif: Spécifie si on veut que les sous objet (relationship) soit égalament sérialisé
-        :param columns: liste des columns qui doivent être prisent en compte
+        Méthode qui renvoie les données de l'objet
+        sous la forme d'un dictionnaire
+
+        Parameters
+        ----------
+        recursif: boolean
+        Spécifie si on veut que les sous objet (relationship)
+        soit égalament sérialisé
+
+        columns: list
+        liste des columns qui doivent être prisent en compte
         """
         obj = {}
         if (not columns):
             columns = self.__table__.columns
 
         for prop in class_mapper(self.__class__).iterate_properties:
-            if getattr(self, prop.key) is None:
-                pass
-            else:
+            if getattr(self, prop.key) is not None:
                 if (isinstance(prop, ColumnProperty) and (prop.key in columns)):
                     column = self.__table__.columns[prop.key]
                     if isinstance(column.type, (db.Date, db.DateTime, UUID)):
@@ -67,11 +73,23 @@ class serializableGeoModel(serializableModel):
 
     def as_geofeature(self, geoCol, idCol, recursif=False, columns=()):
         """
-        Méthode qui renvoie les données de l'objet sous la forme d'une Feature geojson
-        :param geoCol : Nom de la colonne géométrie
-        :param idCol : Nom de la colonne primary key
-        :param recursif: Spécifie si on veut que les sous objet (relationship) soit égalament sérialisé
-        :param columns: liste des columns qui doivent être prisent en compte
+        Méthode qui renvoie les données de l'objet
+        sous la forme d'une Feature geojson
+
+        Parameters
+        ----------
+        geoCol : string
+        Nom de la colonne géométrie
+
+        idCol : string
+        Nom de la colonne primary key
+
+        recursif: boolean
+        Spécifie si on veut que les sous objet (relationship)
+        soit égalament sérialisé
+
+        columns: list
+        liste des columns qui doivent être prisent en compte
         """
         geometry = to_shape(getattr(self, geoCol))
         feature = Feature(
