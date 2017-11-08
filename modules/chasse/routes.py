@@ -56,6 +56,7 @@ pcroutes = Blueprint('plan_chasse', __name__)
 
 
 @pcroutes.route('/bracelet/<int:id>', methods=['GET'])
+@fnauth.check_auth(3, False)
 @json_resp
 def get_bracelet_detail(id=None):
     q = db.session.query(PlanChasse).filter_by(id=id)
@@ -65,7 +66,7 @@ def get_bracelet_detail(id=None):
     except Exception as e:
         db.session.rollback()
         raise
-
+    print(data)
     return data.as_dict()
 
 

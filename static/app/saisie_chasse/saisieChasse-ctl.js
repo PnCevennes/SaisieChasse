@@ -81,7 +81,8 @@ app.controller('saisieChasseCtrl',
                 };
       })
       .catch(function(response) {
-          $scope.errors.push(response.data.message);
+        toaster.pop('error', "Erreur d'enregistrement", response.error, 5000, 'trustedHtml');
+        $scope.errors.push(response.data.message);
       });
   };
 
