@@ -5,7 +5,7 @@ from ..utils.genericmodels import serializableModel
 from geoalchemy2 import Geometry
 
 
-db = SQLAlchemy()
+from . import db
 
 
 class LieuTirSynonymes(serializableModel, db.Model):

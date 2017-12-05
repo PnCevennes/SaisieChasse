@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .models import Thesaurus
 from ..utils.utilssqlalchemy import json_resp
 
-db = SQLAlchemy()
+from . import db
 tthroutes = Blueprint('thesaurus', __name__)
 
 

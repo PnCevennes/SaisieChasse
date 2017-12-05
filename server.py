@@ -3,7 +3,9 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import importlib
 
-db = SQLAlchemy()
+from modules.database import db
+
+db = db
 app_globals = {}
 
 
@@ -15,6 +17,7 @@ def get_app():
 
     app.config.from_pyfile('config.py')
     db.init_app(app)
+    db.app = app
 
     from modules.index import routes
     app.register_blueprint(routes, url_prefix='/')

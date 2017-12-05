@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
 
-db = SQLAlchemy()
+from . import db
 
 
 class Thesaurus(serializableModel, db.Model):

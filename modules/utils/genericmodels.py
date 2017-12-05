@@ -15,7 +15,7 @@ from geojson import Feature
 
 from geoalchemy2 import Geometry
 
-db = SQLAlchemy()
+from . import db
 
 
 class serializableModel(db.Model):

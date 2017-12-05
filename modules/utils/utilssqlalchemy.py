@@ -11,7 +11,7 @@ from sqlalchemy import Table, create_engine, MetaData
 import decimal
 
 
-db = SQLAlchemy()
+from . import db
 
 
 class GenericTable:

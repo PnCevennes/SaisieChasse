@@ -10,7 +10,7 @@ from ..utils.utilssqlalchemy import json_resp
 from pypnusershub import routes as fnauth
 
 
-db = SQLAlchemy()
+from . import db
 ltroutes = Blueprint('lieux_tir', __name__)
 
 
@@ -73,7 +73,7 @@ def get_bracelet_detail(id=None):
 @pcroutes.route('/bracelet/<int:id>', methods=['POST', 'PUT'])
 @fnauth.check_auth(3, True)
 def insertupdate_bracelet_detail(id=None, id_role=None):
-    data = json.loads(request.data.decode())
+    data = json.loads(request.data.decode('utf8'))
     data['numerisateur'] = id_role
     o = PlanChasse(**data)
     db.session.merge(o)

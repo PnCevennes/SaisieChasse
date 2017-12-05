@@ -10,7 +10,7 @@ from ..utils.utilssqlalchemy import json_resp, GenericTable, serializeQuery, ser
 
 from pypnusershub import routes as fnauth
 
-db = SQLAlchemy()
+from . import db
 realroutes = Blueprint('realisation', __name__)
 
 
