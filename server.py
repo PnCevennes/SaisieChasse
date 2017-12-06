@@ -15,9 +15,15 @@ def get_app():
     else:
         app = Flask(__name__)
 
-    app.config.from_pyfile('config.py')
-    db.init_app(app)
-    db.app = app
+    with app.app_context():
+        app.config.from_pyfile('config.py')
+        db.init_app(app)
+        db.app = app
+
+    @app.teardown_request
+    def _manage_transaction(exception):
+        if exception:
+            db.session.rollback()
 
     from modules.index import routes
     app.register_blueprint(routes, url_prefix='/')

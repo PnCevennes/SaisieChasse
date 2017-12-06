@@ -6,7 +6,7 @@ from flask import jsonify,  Response, current_app
 import json
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
-from sqlalchemy import Table, create_engine, MetaData
+from sqlalchemy import Table, MetaData
 
 import decimal
 
@@ -16,8 +16,7 @@ from . import db
 
 class GenericTable:
     def __init__(self, tableName, schemaName):
-        engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
-        meta = MetaData(bind=engine)
+        meta = MetaData(bind=db.engine)
         meta.reflect(schema=schemaName, views=True)
         self.tableDef = meta.tables[tableName]
         self.columns = [column.name for column in self.tableDef.columns]

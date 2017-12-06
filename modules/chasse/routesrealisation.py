@@ -5,7 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select, distinct
 
 from .models import VLieuTirSynonymes, PlanChasse, SaisonChasse
-from ..utils.utilssqlalchemy import json_resp, GenericTable, serializeQuery, serializeQueryOneResult
+from ..utils.utilssqlalchemy import (
+    json_resp, GenericTable, serializeQuery, serializeQueryOneResult
+)
 
 
 from pypnusershub import routes as fnauth
@@ -17,6 +19,7 @@ realroutes = Blueprint('realisation', __name__)
 @realroutes.route('/nomvern_massif', methods=['GET'])
 @json_resp
 def getNomVernMassif():
+    print(getNomVernMassif)
     tableBilanAttributionMassif = GenericTable(
         'chasse.v_rapport_bilan_attribution_massif',
         'chasse'
@@ -41,6 +44,7 @@ def getNomVernMassif():
 @realroutes.route('/attribution_massif', methods=['GET'])
 @json_resp
 def getBilanAttributionMassif():
+    print('getBilanAttributionMassif')
     tBAttMassif = GenericTable(
         'chasse.v_rapport_bilan_attribution_massif',
         'chasse'
@@ -55,4 +59,5 @@ def getBilanAttributionMassif():
     except Exception as e:
         db.session.rollback()
         raise
+
     return serializeQuery(results, q.column_descriptions)
