@@ -15,10 +15,11 @@ from geojson import Feature
 
 from geoalchemy2 import Geometry
 
-from . import db
+from modules.database import DB
 
 
-class serializableModel(db.Model):
+
+class serializableModel(DB.Model):
     """
     Classe qui ajoute une méthode de transformation des données
     de l'objet en tableau json
@@ -49,9 +50,9 @@ class serializableModel(db.Model):
             if getattr(self, prop.key) is not None:
                 if (isinstance(prop, ColumnProperty) and (prop.key in columns)):
                     column = self.__table__.columns[prop.key]
-                    if isinstance(column.type, (db.Date, db.DateTime, UUID)):
+                    if isinstance(column.type, (DB.Date, DB.DateTime, UUID)):
                         obj[prop.key] = str(getattr(self, prop.key))
-                    elif isinstance(column.type, db.Numeric):
+                    elif isinstance(column.type, DB.Numeric):
                         obj[prop.key] = float(getattr(self, prop.key))
                     elif not isinstance(column.type, Geometry):
                         obj[prop.key] = getattr(self, prop.key)

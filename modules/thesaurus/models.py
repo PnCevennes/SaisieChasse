@@ -4,16 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Sequence
 from ..utils.genericmodels import serializableModel
 
-from . import db
+from modules.database import DB
 
 
-class Thesaurus(serializableModel, db.Model):
+class Thesaurus(serializableModel, DB.Model):
     __tablename__ = 'tthesaurus'
     __table_args__ = {'schema': 'chasse'}
-    id = db.Column(db.Integer, primary_key=True)
-    id_type = db.Column(db.Integer)
-    code = db.Column(db.Unicode)
-    libelle = db.Column(db.Unicode)
-    description = db.Column(db.Unicode)
-    fk_parent = db.Column(db.Integer)
-    hierarchie = db.Column(db.Unicode)
+    id = DB.Column(DB.Integer, primary_key=True)
+    id_type = DB.Column(DB.Integer)
+    code = DB.Column(DB.Unicode)
+    libelle = DB.Column(DB.Unicode)
+    description = DB.Column(DB.Unicode)
+    fk_parent = DB.Column(DB.Integer)
+    hierarchie = DB.Column(DB.Unicode)

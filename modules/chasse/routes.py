@@ -9,8 +9,8 @@ from ..utils.utilssqlalchemy import json_resp
 
 from pypnusershub import routes as fnauth
 
+from modules.database import DB
 
-from . import db
 ltroutes = Blueprint('lieux_tir', __name__)
 
 
@@ -18,7 +18,7 @@ ltroutes = Blueprint('lieux_tir', __name__)
 @ltroutes.route('/<int:id>', methods=['GET'])
 @json_resp
 def get_lieutirsyn(id=None):
-    q = db.session.query(VLieuTirSynonymes)
+    q = DB.session.query(VLieuTirSynonymes)
 
     if request.args.get('code_com'):
         q = q.filter_by(code_com=request.args.get('code_com'))
@@ -29,7 +29,7 @@ def get_lieutirsyn(id=None):
     try:
         data = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
     return [attribut.as_dict() for attribut in data]
 
@@ -37,13 +37,13 @@ def get_lieutirsyn(id=None):
 @ltroutes.route('/communes', methods=['GET'])
 @json_resp
 def get_communes():
-    q = db.session \
+    q = DB.session \
         .query(VLieuTirSynonymes.nom_com, VLieuTirSynonymes.code_com) \
         .distinct(VLieuTirSynonymes.nom_com)
     try:
         data = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
 
     return [
@@ -59,14 +59,13 @@ pcroutes = Blueprint('plan_chasse', __name__)
 @fnauth.check_auth(3, False)
 @json_resp
 def get_bracelet_detail(id=None):
-    q = db.session.query(PlanChasse).filter_by(id=id)
+    q = DB.session.query(PlanChasse).filter_by(id=id)
 
     try:
         data = q.first()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
-    print(data)
     return data.as_dict()
 
 
@@ -76,15 +75,15 @@ def insertupdate_bracelet_detail(id=None, id_role=None):
     data = json.loads(request.data.decode('utf8'))
     data['numerisateur'] = id_role
     o = PlanChasse(**data)
-    db.session.merge(o)
+    DB.session.merge(o)
     try:
-        db.session.commit()
+        DB.session.commit()
         return json.dumps({
             'success': True,
             'message': 'Enregistrement sauvegardé avec succès !'
         }), 200, {'ContentType': 'application/json'}
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         return json.dumps({
             'success': False,
             'message': 'Impossible de sauvegarder l\'enregistrement'
@@ -100,9 +99,9 @@ def get_auteurs():
     q = s1.union(s2).alias('auteurs')
 
     try:
-        data = db.session.query(q).all()
+        data = DB.session.query(q).all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
     return [{"auteur_tir": a} for a in data]
 
@@ -110,11 +109,11 @@ def get_auteurs():
 @pcroutes.route('/saison', methods=['GET'])
 @json_resp
 def get_saison_list():
-    q = db.session.query(SaisonChasse)
+    q = DB.session.query(SaisonChasse)
     try:
         data = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
 
     return [a.as_dict() for a in data]
@@ -123,7 +122,7 @@ def get_saison_list():
 @pcroutes.route('/bracelets_list/<int:saison>', methods=['GET'])
 @json_resp
 def get_bracelet_list(saison=None):
-    q = db.session \
+    q = DB.session \
         .query(PlanChasse.id, PlanChasse.no_bracelet) \
         .filter_by(fk_saison=saison)\
         .distinct()
@@ -131,7 +130,7 @@ def get_bracelet_list(saison=None):
     try:
         data = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
     return [
         {"no_bracelet": attribut.no_bracelet, "id": int(attribut.id)}

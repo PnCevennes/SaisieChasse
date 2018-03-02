@@ -5,14 +5,15 @@ from flask_sqlalchemy import SQLAlchemy
 from .models import Thesaurus
 from ..utils.utilssqlalchemy import json_resp
 
-from . import db
+from modules.database import DB
+
 tthroutes = Blueprint('thesaurus', __name__)
 
 
 @tthroutes.route('/vocabulary/<int:id>', methods=['GET'])
 @json_resp
 def get_vocabulary(id=None):
-    q = db.session.query(
+    q = DB.session.query(
             Thesaurus.id,
             Thesaurus.code,
             Thesaurus.libelle,
@@ -26,7 +27,7 @@ def get_vocabulary(id=None):
     try:
         data = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
 
     return [

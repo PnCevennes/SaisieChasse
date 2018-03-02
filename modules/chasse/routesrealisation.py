@@ -12,27 +12,28 @@ from ..utils.utilssqlalchemy import (
 
 from pypnusershub import routes as fnauth
 
-from . import db
+from modules.database import DB
+
+
 realroutes = Blueprint('realisation', __name__)
 
 
 @realroutes.route('/nomvern_massif', methods=['GET'])
 @json_resp
 def getNomVernMassif():
-    print(getNomVernMassif)
     tableBilanAttributionMassif = GenericTable(
         'chasse.v_rapport_bilan_attribution_massif',
         'chasse'
     )
     col = tableBilanAttributionMassif.tableDef.columns
-    q = db.session.query(col.nom_vern, col.massif).distinct()
+    q = DB.session.query(col.nom_vern, col.massif).distinct()
     try:
         results = q.all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
     data = {}
-    for d in db.session.query(col.nom_vern, col.massif).distinct():
+    for d in DB.session.query(col.nom_vern, col.massif).distinct():
         try:
             data[d.nom_vern]
         except Exception as e:
@@ -44,20 +45,19 @@ def getNomVernMassif():
 @realroutes.route('/attribution_massif', methods=['GET'])
 @json_resp
 def getBilanAttributionMassif():
-    print('getBilanAttributionMassif')
     tBAttMassif = GenericTable(
         'chasse.v_rapport_bilan_attribution_massif',
         'chasse'
     )
     tcols = tBAttMassif.tableDef.columns
-    q = db.session.query(tBAttMassif.tableDef)
+    q = DB.session.query(tBAttMassif.tableDef)
     try:
         results = q.filter(
             getattr(tcols, 'nom_vern') == request.args.get('nom_vern'))\
             .filter(getattr(tcols, 'massif') == request.args.get('massif'))\
             .all()
     except Exception as e:
-        db.session.rollback()
+        DB.session.rollback()
         raise
 
     return serializeQuery(results, q.column_descriptions)

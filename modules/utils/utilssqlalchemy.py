@@ -10,13 +10,12 @@ from sqlalchemy import Table, MetaData
 
 import decimal
 
-
-from . import db
+from modules.database import DB
 
 
 class GenericTable:
     def __init__(self, tableName, schemaName):
-        meta = MetaData(bind=db.engine)
+        meta = MetaData(bind=DB.engine)
         meta.reflect(schema=schemaName, views=True)
         self.tableDef = meta.tables[tableName]
         self.columns = [column.name for column in self.tableDef.columns]
@@ -48,9 +47,9 @@ def _normalize(obj, columns):
     out = {}
     for col in columns:
         if getattr(obj, col['name']) is not None:
-            if isinstance(col['type'], db.Date):
+            if isinstance(col['type'], DB.Date):
                 out[col['name']] = str(getattr(obj, col['name']))
-            if isinstance(col['type'], db.Numeric):
+            if isinstance(col['type'], DB.Numeric):
                 out[col['name']] = float(str(getattr(obj, col['name'])))
             else:
                 out[col['name']] = getattr(obj, col['name'])

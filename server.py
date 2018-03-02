@@ -3,9 +3,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import importlib
 
-from modules.database import db
+from modules.database import DB
 
-db = db
 app_globals = {}
 
 
@@ -17,13 +16,13 @@ def get_app():
 
     with app.app_context():
         app.config.from_pyfile('config.py')
-        db.init_app(app)
-        db.app = app
+        DB.init_app(app)
+        DB.app = app
 
     @app.teardown_request
     def _manage_transaction(exception):
         if exception:
-            db.session.rollback()
+            DB.session.rollback()
 
     from modules.index import routes
     app.register_blueprint(routes, url_prefix='/')
